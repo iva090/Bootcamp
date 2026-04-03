@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/Logo.png';
 import NotAuth from './NotAuth';
+import Auth from './Auth';
+import useAuthStore from '../../store/useAuthStore';
 
 export default function Header() {
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
     return (
         <header className="flex items-center justify-between px-30 py-4 bg-[#F8F9FA] border-b border-gray-200">
 
@@ -22,8 +26,9 @@ export default function Header() {
 
                     Browse Courses
                 </Link>
+                <Auth />
+                {/* {isLoggedIn ? <Auth /> : <NotAuth />} */}
 
-                <NotAuth />
             </div>
         </header>
     )
