@@ -8,7 +8,7 @@ export default function Header() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
     return (
-        <header className="flex items-center justify-between px-30 py-4 border-b border-gray-300">
+        <header className="flex items-center justify-between px-60 py-4 border-b border-gray-300">
             <div className="flex items-center">
                 <Link to="/">
                     <img src={Logo} alt="Logo" className="h-10 w-auto rounded-lg shadow-sm" />
