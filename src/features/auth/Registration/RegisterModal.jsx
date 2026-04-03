@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useRegister } from "../hooks/useRegister";
 
 const EmailStep = ({ onNext, formData, setFormData }) => (
     <div className="flex flex-col gap-4 animate-fadeIn">
         <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-semibold text-gray-700">Email Address*</label>
+            <label className="text-sm font-semibold text-gray-700">Email*</label>
             <input
                 type="email"
                 value={formData.email}
@@ -85,11 +86,15 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading }) => (
 
 export const RegisterModal = ({ isOpen, onClose }) => {
     const [step, setStep] = useState(1);
-    const [formData, setFormData] = useState({ email: '', password: '', name: '' });
+    const [formData, setFormData] = useState({ email: '', password: '', name: '', avatar: '' });
+    const { submitRegistration, isLoading, error } = useRegister(() => {
+        onClose();
+    })
 
     if (!isOpen) return null;
 
     const nextStep = () => setStep((prev) => prev + 1);
+
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -109,10 +114,22 @@ export const RegisterModal = ({ isOpen, onClose }) => {
 
                 {step === 1 && <EmailStep onNext={nextStep} formData={formData} setFormData={setFormData} />}
                 {step === 2 && <PasswordStep onNext={nextStep} formData={formData} setFormData={setFormData} />}
-                {step === 3 && <FinalStep onSubmit={handleSubmit} formData={formData} onClose={onClose} />}
+                {step === 3 && <FinalStep onSubmit={() => submitRegistration(formData)} formData={formData} onClose={onClose} />}
+                <div className="relative flex justify-center mt-2">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200"></div>
+                    </div>
 
-                <div className="mt-6 text-center text-sm text-gray-500">
-                    Already have an account? <button className="font-semibold underline text-gray-900">Log In</button>
+                    <div className="relative flex justify-center">
+                        <span className="bg-white px-2 text-md text-gray-500">or</span>
+                    </div>
+                </div>
+
+                <div className="text-center text-sm text-gray-500 mt-5">
+                    Already have an account?
+                    <button onClick={() => {
+
+                    }} className="font-semibold underline text-gray-900 ml-3">Log  In</button>
                 </div>
             </div>
         </div>
