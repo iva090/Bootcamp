@@ -5,22 +5,24 @@ export const useRegister = (onSuccess) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const submitRegistration = async (formData) => {
+    const submitRegistration = async (data) => {
         setIsLoading(true);
         setError(null);
 
         try {
-            const response = await axios.post('https://api.redclass.redberryinternship.ge/api/register', formData, {
+            const response = await axios.post('https://api.redclass.redberryinternship.ge/api/register', data, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json'
                 }
             });
-            if (onSuccess) onSuccess(response.data);
-            return { success: true };
 
+            if (onSuccess) onSuccess(response.data);
+            console.log(response.data);
+            return { success: true };
         } catch (err) {
-            const errorMessage = err.response?.data?.message || "Registration failed";
-            setError(errorMessage);
+            const apiError = err.response?.data?.errors || err.response?.data?.message;
+            setError(apiError);
             return { success: false };
         } finally {
             setIsLoading(false);

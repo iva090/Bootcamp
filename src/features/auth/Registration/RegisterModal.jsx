@@ -3,34 +3,46 @@ import { useRegister } from "../hooks/useRegister";
 import InputBox from "../../../components/InputBox";
 import AvatarUpload from "../../../components/registration/AvatarUpload";
 
-const EmailStep = ({ onNext, formData, setFormData, apiError }) => (
-    <div className="flex flex-col gap-4 animate-fadeIn">
-        <InputBox
-            label="Email"
-            type="email"
-            name="email"
-            value={formData.email}
-            formData={formData}
-            setFormData={setFormData}
-            placeholder="you@example.com"
-            error={apiError?.email}
-        />
-        <button
-            disabled={!formData.email.includes('@', '.') || formData.email.length < 3}
-            onClick={onNext}
-            className="w-full bg-[#5D51E8] disabled:bg-gray-300 text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
-        >
-            Next
-        </button>
-    </div>
-);
+const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onNext();
+    };
 
-const PasswordStep = ({ onNext, formData, setFormData, apiError }) => {
+    return (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fadeIn">
+            <InputBox
+                label="Email"
+                type="email"
+                name="email"
+                value={formData.email}
+                formData={formData}
+                setFormData={setFormData}
+                placeholder="you@example.com"
+                error={apiError?.email}
+            />
+            <button
+                disabled={!formData.email.includes('@') || !formData.email.includes('.') || formData.email.length < 3}
+                type="submit"
+                className="w-full bg-[#5D51E8] disabled:bg-gray-300 text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
+            >
+                Next
+            </button>
+        </form>
+    );
+};
+
+const PasswordStep = ({ onNext, formData, setFormData }) => {
     const isMatching = formData.password === formData.confirmPassword;
     const isValid = formData.password.length >= 3 && isMatching;
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onNext();
+    };
+
     return (
-        <div className="flex flex-col gap-4 animate-fadeIn">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fadeIn">
             <InputBox
                 label="Password"
                 type="password"
@@ -38,6 +50,7 @@ const PasswordStep = ({ onNext, formData, setFormData, apiError }) => {
                 value={formData.password}
                 formData={formData}
                 setFormData={setFormData}
+                autocomplete="new-password"
                 placeholder="••••••••"
             />
             <InputBox
@@ -48,24 +61,30 @@ const PasswordStep = ({ onNext, formData, setFormData, apiError }) => {
                 formData={formData}
                 setFormData={setFormData}
                 placeholder="••••••••"
+                autocomplete="new-password"
                 error={formData.confirmPassword && !isMatching ? "Passwords do not match" : null}
             />
             <button
                 disabled={!isValid}
-                onClick={onNext}
+                type="submit"
                 className="w-full bg-[#5D51E8] disabled:bg-gray-300 text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
             >
                 Continue
             </button>
-        </div>
+        </form>
     );
 };
 
 const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => {
     const isValid = formData.username.length >= 3;
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit();
+    };
+
     return (
-        <div className="flex flex-col gap-5 animate-fadeIn">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 animate-fadeIn">
             <InputBox
                 label="Username"
                 type="text"
@@ -77,24 +96,19 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
                 error={apiError?.username}
             />
 
-            <AvatarUpload />
+            <AvatarUpload
+                onFileSelect={(file) => setFormData({ ...formData, avatar: file })}
+                error={apiError?.avatar}
+            />
 
             <button
-                onClick={onSubmit}
                 disabled={isLoading || !isValid}
+                type="submit"
                 className="w-full bg-[#5D51E8] disabled:bg-gray-300 text-white font-bold py-3.5 rounded-xl hover:bg-[#4A3ED1] transition-all shadow-md active:scale-[0.98]"
             >
-                {isLoading ? (
-                    <span className="flex items-center justify-center gap-2">
-                        <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
-                        Signing Up...
-                    </span>
-                ) : "Sign Up"}
+                {isLoading ? "Signing Up..." : "Sign Up"}
             </button>
-        </div>
+        </form>
     );
 };
 
@@ -114,6 +128,17 @@ export const RegisterModal = ({ isOpen, onClose }) => {
 
     if (!isOpen) return null;
 
+    const handleFinalSubmit = () => {
+        const data = new FormData();
+        data.append('email', formData.email);
+        data.append('username', formData.username);
+        data.append('password', formData.password);
+        data.append('password_confirmation', formData.confirmPassword);
+        if (formData.avatar) data.append('avatar', formData.avatar);
+
+        submitRegistration(data);
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
             <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-[448px] relative">
@@ -131,8 +156,16 @@ export const RegisterModal = ({ isOpen, onClose }) => {
                 </div>
 
                 {step === 1 && <EmailStep onNext={() => setStep(2)} formData={formData} setFormData={setFormData} apiError={apiError} />}
-                {step === 2 && <PasswordStep onNext={() => setStep(3)} formData={formData} setFormData={setFormData} apiError={apiError} />}
-                {step === 3 && <FinalStep onSubmit={() => submitRegistration(formData)} formData={formData} setFormData={setFormData} isLoading={isLoading} />}
+                {step === 2 && <PasswordStep onNext={() => setStep(3)} formData={formData} setFormData={setFormData} />}
+                {step === 3 && (
+                    <FinalStep
+                        onSubmit={handleFinalSubmit}
+                        formData={formData}
+                        setFormData={setFormData}
+                        isLoading={isLoading}
+                        apiError={apiError}
+                    />
+                )}
 
                 <div className="text-center text-sm text-gray-500 mt-6 pt-6 border-t border-gray-100">
                     Already have an account?
