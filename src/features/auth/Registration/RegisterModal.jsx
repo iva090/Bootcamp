@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRegister } from "../hooks/useRegister";
 import InputBox from "../../../components/InputBox";
 import AvatarUpload from "../../../components/registration/AvatarUpload";
+import RegFooter from "./RegFooter";
 
 const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
     const handleSubmit = (e) => {
@@ -92,7 +93,7 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
                 value={formData.username}
                 formData={formData}
                 setFormData={setFormData}
-                placeholder="johndoe123"
+                placeholder="Username"
                 error={apiError?.username}
             />
 
@@ -124,6 +125,17 @@ export const RegisterModal = ({ isOpen, onClose }) => {
 
     const { submitRegistration, isLoading, error: apiError } = useRegister(() => {
         onClose();
+
+        setTimeout(() => {
+            setStep(1);
+            setFormData({
+                email: '',
+                username: '',
+                password: '',
+                confirmPassword: '',
+                avatar: null
+            });
+        }, 300);
     });
 
     if (!isOpen) return null;
@@ -140,7 +152,7 @@ export const RegisterModal = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 ">
             <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-[448px] relative">
                 <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">✕</button>
 
@@ -166,11 +178,7 @@ export const RegisterModal = ({ isOpen, onClose }) => {
                         apiError={apiError}
                     />
                 )}
-
-                <div className="text-center text-sm text-gray-500 mt-6 pt-6 border-t border-gray-100">
-                    Already have an account?
-                    <button className="font-semibold text-[#5D51E8] ml-2 hover:underline">Log In</button>
-                </div>
+                <RegFooter />
             </div>
         </div>
     );
