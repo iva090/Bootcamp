@@ -6,9 +6,24 @@ import RegFooter from "./RegFooter";
 import useAuthStore from "../../../store/useAuthStore";
 
 const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
+    const [localError, setLocalError] = useState("");
+
+    const validate = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.email) return "Email is required";
+        if (!emailRegex.test(formData.email)) return "Please enter a valid email address";
+        return "";
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        onNext();
+        const error = validate();
+        if (error) {
+            setLocalError(error);
+        } else {
+            setLocalError("");
+            onNext();
+        }
     };
 
     return (
@@ -21,12 +36,12 @@ const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
                 formData={formData}
                 setFormData={setFormData}
                 placeholder="you@example.com"
-                error={apiError?.email}
+                // Prioritize API errors, fallback to local validation errors
+                error={apiError?.email || localError}
             />
             <button
-                disabled={!formData.email.includes('@') || !formData.email.includes('.') || formData.email.length < 3}
                 type="submit"
-                className="w-full bg-[#5D51E8] disabled:bg-gray-300 text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
+                className="w-full bg-[#5D51E8] text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
             >
                 Next
             </button>
@@ -35,12 +50,26 @@ const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
 };
 
 const PasswordStep = ({ onNext, formData, setFormData }) => {
+    const [errors, setErrors] = useState({});
     const isMatching = formData.password === formData.confirmPassword;
-    const isValid = formData.password.length >= 3 && isMatching;
+
+    const validate = () => {
+        let newErrors = {};
+        if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters";
+        if (!formData.confirmPassword) newErrors.confirmPassword = "Please confirm your password";
+        else if (!isMatching) newErrors.confirmPassword = "Passwords do not match";
+        return newErrors;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onNext();
+        const findErrors = validate();
+        if (Object.keys(findErrors).length > 0) {
+            setErrors(findErrors);
+        } else {
+            setErrors({});
+            onNext();
+        }
     };
 
     return (
@@ -54,6 +83,7 @@ const PasswordStep = ({ onNext, formData, setFormData }) => {
                 setFormData={setFormData}
                 autocomplete="new-password"
                 placeholder="••••••••"
+                error={errors.password}
             />
             <InputBox
                 label="Confirm Password"
@@ -64,12 +94,11 @@ const PasswordStep = ({ onNext, formData, setFormData }) => {
                 setFormData={setFormData}
                 placeholder="••••••••"
                 autocomplete="new-password"
-                error={formData.confirmPassword && !isMatching ? "Passwords do not match" : null}
+                error={errors.confirmPassword}
             />
             <button
-                disabled={!isValid}
                 type="submit"
-                className="w-full bg-[#5D51E8] disabled:bg-gray-300 text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
+                className="w-full bg-[#5D51E8] text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
             >
                 Continue
             </button>
@@ -78,11 +107,16 @@ const PasswordStep = ({ onNext, formData, setFormData }) => {
 };
 
 const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => {
-    const isValid = formData.username.length >= 3;
+    const [localError, setLocalError] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit();
+        if (formData.username.length < 3) {
+            setLocalError("Username must be at least 3 characters");
+        } else {
+            setLocalError("");
+            onSubmit();
+        }
     };
 
     return (
@@ -95,7 +129,7 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
                 formData={formData}
                 setFormData={setFormData}
                 placeholder="Username"
-                error={apiError?.username}
+                error={apiError?.username || localError}
             />
 
             <AvatarUpload
@@ -104,7 +138,7 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
             />
 
             <button
-                disabled={isLoading || !isValid}
+                disabled={isLoading}
                 type="submit"
                 className="w-full bg-[#5D51E8] disabled:bg-gray-300 text-white font-bold py-3.5 rounded-xl hover:bg-[#4A3ED1] transition-all shadow-md active:scale-[0.98]"
             >
@@ -117,7 +151,6 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
 export const RegisterModal = ({ isOpen, onClose }) => {
     const [step, setStep] = useState(1);
     const login = useAuthStore((state) => state.login);
-
 
     const [formData, setFormData] = useState({
         email: '',

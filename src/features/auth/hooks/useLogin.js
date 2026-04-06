@@ -1,16 +1,16 @@
 import { useState } from "react";
 import api from "./axios";
 
-export const useRegister = (onSuccess) => {
+export const useLogin = (onSuccess) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const submitRegistration = async (data) => {
+    const submitLogin = async (data) => {
         setIsLoading(true);
         setError(null);
 
         try {
-            const response = await api.post('/register', data);
+            const response = await api.post('/login', data);
 
             if (onSuccess) onSuccess(response.data);
             return { success: true, data: response.data };
@@ -23,5 +23,5 @@ export const useRegister = (onSuccess) => {
         }
     };
 
-    return { submitRegistration, isLoading, error };
+    return { submitLogin, isLoading, error };
 };
