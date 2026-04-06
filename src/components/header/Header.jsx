@@ -6,6 +6,7 @@ import useAuthStore from '../../store/useAuthStore';
 
 export default function Header() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    console.log(isLoggedIn);
 
     return (
         <header className="flex items-center justify-between px-60 py-4 border-b border-gray-300">

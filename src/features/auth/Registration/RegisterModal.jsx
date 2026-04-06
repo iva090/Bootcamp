@@ -3,6 +3,7 @@ import { useRegister } from "../hooks/useRegister";
 import InputBox from "../../../components/InputBox";
 import AvatarUpload from "../../../components/registration/AvatarUpload";
 import RegFooter from "./RegFooter";
+import useAuthStore from "../../../store/useAuthStore";
 
 const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
     const handleSubmit = (e) => {
@@ -115,6 +116,9 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
 
 export const RegisterModal = ({ isOpen, onClose }) => {
     const [step, setStep] = useState(1);
+    const login = useAuthStore((state) => state.login);
+
+
     const [formData, setFormData] = useState({
         email: '',
         username: '',
@@ -123,7 +127,11 @@ export const RegisterModal = ({ isOpen, onClose }) => {
         avatar: null
     });
 
-    const { submitRegistration, isLoading, error: apiError } = useRegister(() => {
+    const { submitRegistration, isLoading, error: apiError } = useRegister((responseData) => {
+        if (responseData?.user) {
+            login(responseData.user);
+        }
+
         onClose();
 
         setTimeout(() => {

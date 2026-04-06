@@ -1,38 +1,48 @@
 import { Link } from "react-router-dom";
-import User from "../../assets/User.png"
+import UserDefault from "../../assets/User.png";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function Auth() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const user = useAuthStore((state) => state.user);
+
+    if (!isLoggedIn) {
+        return (
+            <Link to="/login" className="text-indigo-600 font-semibold hover:text-indigo-700">
+                Sign In
+            </Link>
+        );
+    }
+
     return (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-6">
             <Link
                 to='/enrolled'
-                className="flex items-center gap-2 text-gray-700 hover:text-indigo-600 font-medium transition-colors">
-                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13 7.58333V22.75M13 7.58333C13 6.43406 12.5435 5.33186 11.7308 4.5192C10.9182 3.70655 9.81596 3.25 8.66669 3.25H3.25002C2.9627 3.25 2.68715 3.36414 2.48399 3.5673C2.28082 3.77047 2.16669 4.04602 2.16669 4.33333V18.4167C2.16669 18.704 2.28082 18.9795 2.48399 19.1827C2.68715 19.3859 2.9627 19.5 3.25002 19.5H9.75002C10.612 19.5 11.4386 19.8424 12.0481 20.4519C12.6576 21.0614 13 21.888 13 22.75M13 7.58333C13 6.43406 13.4566 5.33186 14.2692 4.5192C15.0819 3.70655 16.1841 3.25 17.3334 3.25H22.75C23.0373 3.25 23.3129 3.36414 23.5161 3.5673C23.7192 3.77047 23.8334 4.04602 23.8334 4.33333V18.4167C23.8334 18.704 23.7192 18.9795 23.5161 19.1827C23.3129 19.3859 23.0373 19.5 22.75 19.5H16.25C15.3881 19.5 14.5614 19.8424 13.9519 20.4519C13.3424 21.0614 13 21.888 13 22.75" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                Enrolled Courses
-            </Link>
-            <div
-                className="relative inline-flex items-center justify-center  rounded-full bg-indigo-50 cursor-pointer hover:bg-indigo-100 transition-colors duration-200"
+                className="flex items-center gap-2 text-gray-700 hover:text-indigo-600 font-medium transition-colors"
             >
-                {isLoggedIn ? (
-                    <img
-                        src={User}
-                        alt="Profile"
-                        className="w-full h-full object-cover rounded-full"
-                    />
-                ) : (
-                    <img
-                        src={User}
-                        alt="Profile"
-                        className="w-full h-full object-cover rounded-full"
-                    />
-                )}
+                <svg width="24" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 7.58333V22.75M13 7.58333C13 6.43406 12.5435 5.33186 11.7308 4.5192C10.9182 3.70655 9.81596 3.25 8.66669 3.25H3.25002C2.9627 3.25 2.68715 3.36414 2.48399 3.5673C2.28082 3.77047 2.16669 4.04602 2.16669 4.33333V18.4167C2.16669 18.704 2.28082 18.9795 2.48399 19.1827C2.68715 19.3859 2.9627 19.5 3.25002 19.5H9.75002C10.612 19.5 11.4386 19.8424 12.0481 20.4519C12.6576 21.0614 13 21.888 13 22.75M13 7.58333C13 6.43406 13.4566 5.33186 14.2692 4.5192C15.0819 3.70655 16.1841 3.25 17.3334 3.25H22.75C23.0373 3.25 23.3129 3.36414 23.5161 3.5673C23.7192 3.77047 23.8334 4.04602 23.8334 4.33333V18.4167C23.8334 18.704 23.7192 18.9795 23.5161 19.1827C23.3129 19.3859 23.0373 19.5 22.75 19.5H16.25C15.3881 19.5 14.5614 19.8424 13.9519 20.4519C13.3424 21.0614 13 21.888 13 22.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="hidden sm:inline">Enrolled Courses</span>
+            </Link>
 
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-amber-400 rounded-full border-2 border-white shadow-sm" />
+            {/* Profile Avatar Container */}
+            <div className="relative group">
+                <div className="w-10 h-10 rounded-full border-2 border-indigo-100 p-0.5 overflow-hidden cursor-pointer hover:border-indigo-300 transition-all">
+                    <img
+                        src={user?.avatar || UserDefault}
+                        alt={user?.username || "Profile"}
+                        className="w-full h-full object-cover rounded-full bg-gray-50"
+                        onError={(e) => { e.target.src = UserDefault }}
+                    />
+                </div>
+
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm" />
+
+                <div className="absolute top-12 right-0 hidden group-hover:block bg-gray-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
+                    {user?.username}
+                </div>
             </div>
         </div>
-    )
+    );
 }
