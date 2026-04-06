@@ -42,7 +42,7 @@ export default function LoginModal({ isOpen, onClose }) {
                     <p className="text-gray-500 text-sm mt-1">Log in to continue your learning</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <InputBox
                         label="Email"
                         type="email"

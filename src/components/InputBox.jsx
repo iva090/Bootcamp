@@ -45,9 +45,9 @@ export default function InputBox({
                         className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                     >
                         {showPassword ? (
-                            <EyeOff className={`w-5 h-5 ${error ? "text-red-500" : ""}`} />
-                        ) : (
                             <Eye className={`w-5 h-5 ${error ? "text-red-500" : ""}`} />
+                        ) : (
+                            <EyeOff className={`w-5 h-5 ${error ? "text-red-500" : ""}`} />
                         )}
                     </button>
                 )}

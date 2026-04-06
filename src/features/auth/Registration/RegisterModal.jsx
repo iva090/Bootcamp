@@ -55,7 +55,7 @@ const PasswordStep = ({ onNext, formData, setFormData }) => {
 
     const validate = () => {
         let newErrors = {};
-        if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters";
+        if (formData.password.length < 3) newErrors.password = "Password must be at least 3 characters";
         if (!formData.confirmPassword) newErrors.confirmPassword = "Please confirm your password";
         else if (!isMatching) newErrors.confirmPassword = "Passwords do not match";
         return newErrors;
@@ -73,7 +73,7 @@ const PasswordStep = ({ onNext, formData, setFormData }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fadeIn">
+        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fadeIn">
             <InputBox
                 label="Password"
                 type="password"
@@ -120,7 +120,7 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 animate-fadeIn">
+        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-5 animate-fadeIn">
             <InputBox
                 label="Username"
                 type="text"
