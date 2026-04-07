@@ -1,9 +1,10 @@
 import Modal from "../../components/Modal";
 import UserDefault from "../../assets/User.png"
 import useAuthStore from "../../store/useAuthStore";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import InputBox from "../../components/InputBox";
 import AvatarUpload from "../../components/registration/AvatarUpload";
+import { useUpdateProfile } from "../auth/hooks/useUpdateProfile";
 
 const validateProfile = (values) => {
     const errors = {};
@@ -55,6 +56,10 @@ export default function ProfileModal({ isOpen, onClose }) {
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
 
+    const { submitUpdate, error: apiError } = useUpdateProfile(() => {
+        onClose();
+    })
+
     useEffect(() => {
         if (user && isOpen) {
             setFormData({
@@ -74,12 +79,11 @@ export default function ProfileModal({ isOpen, onClose }) {
         setErrors(validationErrors);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validateProfile(formData);
         if (Object.keys(validationErrors).length === 0) {
-            console.log("Submitting:", formData);
-            onClose();
+            await submitUpdate({ ...formData, age: Number(formData.age) });
         } else {
             setErrors(validationErrors);
             setTouched({ fullName: true, mobileNumber: true, age: true });
@@ -116,6 +120,10 @@ export default function ProfileModal({ isOpen, onClose }) {
             </div>
 
             <form noValidate onSubmit={handleSubmit} className="space-y-4 text-left">
+                {typeof apiError === 'string' && (
+                    <p className="text-red-500 text-xs bg-red-50 p-2 rounded-lg">{apiError}</p>
+                )}
+
                 <InputBox
                     label="Full Name"
                     type="username"
@@ -125,7 +133,7 @@ export default function ProfileModal({ isOpen, onClose }) {
                     setFormData={setFormData}
                     onBlur={() => handleBlur("fullName")}
                     error={touched.fullName && errors.fullName}
-                    placeholder="Enter full name"
+                    placeholder={user?.fullName || "Enter full name"}
                 />
 
                 <div>

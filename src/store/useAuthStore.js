@@ -7,8 +7,12 @@ const useAuthStore = create(
             isLoggedIn: false,
             isProfileFilled: false,
             user: null,
+            token: null,
 
-            login: (userData) => set({ isLoggedIn: true, user: userData }),
+            login: (userData, token) => {
+                if (token) localStorage.setItem('auth_token', token);
+                set({ isLoggedIn: true, user: userData, token: token })
+            },
             logout: () => {
                 localStorage.removeItem('auth_token');
                 set({ isLoggedIn: false, user: null });
