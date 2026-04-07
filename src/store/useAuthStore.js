@@ -5,6 +5,7 @@ const useAuthStore = create(
     persist(
         (set) => ({
             isLoggedIn: false,
+            isProfileFilled: false,
             user: null,
 
             login: (userData) => set({ isLoggedIn: true, user: userData }),
@@ -15,7 +16,9 @@ const useAuthStore = create(
 
             updateProfile: (newData) => set((state) => ({
                 user: { ...state.user, ...newData }
-            }))
+            })),
+
+            fillProfile: () => set({ isProfileFilled: true }),
         }),
         {
             name: 'auth-storage',
