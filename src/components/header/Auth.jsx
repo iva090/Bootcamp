@@ -3,6 +3,7 @@ import UserDefault from "../../assets/User.png";
 import useAuthStore from "../../store/useAuthStore";
 import ProfileModal from "../../features/Profile/ProfileModal";
 import { useModal } from "../../hooks/useModal";
+import { useEffect } from "react";
 
 export default function Auth() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -33,7 +34,7 @@ export default function Auth() {
                     onClick={profile.openModal}
                     className="w-10 h-10 rounded-full border-2 border-indigo-100 p-0.5 overflow-hidden cursor-pointer hover:border-indigo-300 transition-all">
                     <img
-                        src={user?.avatar || UserDefault}
+                        src={user?.data?.user?.avatar || UserDefault}
                         alt={user?.username || "Profile"}
                         className="w-full h-full object-cover rounded-full bg-gray-50"
                         onError={(e) => { e.target.src = UserDefault }}

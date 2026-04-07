@@ -1,6 +1,9 @@
 import Modal from "../../components/Modal";
+import UserDefault from "../../assets/User.png"
+import useAuthStore from "../../store/useAuthStore";
 
 export default function ProfileModal({ isOpen, onClose }) {
+    const user = useAuthStore((state) => state.user);
     return (
         <div>
             <Modal
@@ -9,10 +12,9 @@ export default function ProfileModal({ isOpen, onClose }) {
                 title="Logout"
                 maxWidth="max-w-[320px]"
             >
-                <p></p>
-                <button className="bg-red-500 text-white w-full py-2 mt-4 rounded-lg">
-                    Yes, Logout
-                </button>
+                <img src={user?.avatar || UserDefault}
+                    alt={user?.username || "Profile"}
+                    className="w-full h-full object-cover rounded-full bg-gray-50" />
             </Modal>
         </div>
     )

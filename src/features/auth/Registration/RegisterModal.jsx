@@ -4,6 +4,7 @@ import InputBox from "../../../components/InputBox";
 import AvatarUpload from "../../../components/registration/AvatarUpload";
 import RegFooter from "./RegFooter";
 import useAuthStore from "../../../store/useAuthStore";
+import Modal from "../../../components/Modal";
 
 const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
     const [localError, setLocalError] = useState("");
