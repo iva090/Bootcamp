@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Edit2, Lock } from "lucide-react";
+import { Eye, EyeOff, Edit2, Lock, Check } from "lucide-react";
 
 export default function InputBox({
     label,
@@ -13,14 +13,18 @@ export default function InputBox({
     error,
     disabledUsername: externalDisabled,
     onBlur,
-    needAsterisk
+    needAsterisk,
+    prefix
 }) {
     const [showPassword, setShowPassword] = useState(false);
     const [isLocked, setIsLocked] = useState(true);
 
     const isPassword = type === "password";
     const isUsernameType = type === "username";
+
     const isDisabled = isUsernameType ? isLocked : externalDisabled;
+
+    const showCheckmark = value && !error && !isPassword && !isUsernameType;
 
     const inputType = isPassword ? (showPassword ? "text" : "password") : (isUsernameType ? "text" : type);
 
@@ -30,7 +34,13 @@ export default function InputBox({
                 {label}{needAsterisk && "*"}
             </label>
 
-            <div className="relative">
+            <div className="relative w-full flex items-center">
+                {prefix && (
+                    <span className="absolute left-4 text-gray-400 font-medium z-10 pointer-events-none">
+                        {prefix}
+                    </span>
+                )}
+
                 <input
                     type={inputType}
                     value={value}
@@ -40,6 +50,7 @@ export default function InputBox({
                     placeholder={placeholder}
                     disabled={isDisabled}
                     className={`w-full border p-3 rounded-xl outline-none transition-all duration-200
+                        ${prefix ? "pl-[60px]" : "pl-4"} 
                         ${isDisabled ? "bg-gray-100 text-gray-500 cursor-not-allowed border-gray-200" : "bg-white"}
                         ${error
                             ? "border-red-500 text-red-500 focus:border-red-500"
@@ -47,30 +58,35 @@ export default function InputBox({
                         } 
                         placeholder:text-gray-400 placeholder:font-light`}
                 />
+                <div className="absolute right-4 flex items-center">
+                    {isPassword && !externalDisabled && (
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="text-gray-400 hover:text-gray-600"
+                        >
+                            {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                        </button>
+                    )}
 
-                {isPassword && !externalDisabled && (
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                        {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
-                    </button>
-                )}
+                    {isUsernameType && (
+                        <button
+                            type="button"
+                            onClick={() => setIsLocked(!isLocked)}
+                            className="text-gray-400 hover:text-[#5D51E8]"
+                        >
+                            {isLocked ? (
+                                <Edit2 className="w-4 h-4 text-[#5D51E8]" />
+                            ) : (
+                                <Lock className="w-4 h-4" />
+                            )}
+                        </button>
+                    )}
 
-                {isUsernameType && (
-                    <button
-                        type="button"
-                        onClick={() => setIsLocked(!isLocked)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#5D51E8] transition-colors"
-                    >
-                        {isLocked ? (
-                            <Edit2 className="w-4 h-4 text-[#5D51E8]" />
-                        ) : (
-                            <Lock className="w-4 h-4" />
-                        )}
-                    </button>
-                )}
+                    {showCheckmark && (
+                        <Check className="w-5 h-5 text-gray-300" />
+                    )}
+                </div>
             </div>
 
             {error && (

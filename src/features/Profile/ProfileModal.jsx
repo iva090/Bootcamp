@@ -128,20 +128,24 @@ export default function ProfileModal({ isOpen, onClose }) {
                     placeholder="Enter full name"
                 />
 
-                <InputBox
-                    label="Email"
-                    name="email"
-                    value={formData.email}
-                    formData={formData}
-                    setFormData={setFormData}
-                    disabledUsername={true}
-                />
+                <div>
+                    <InputBox
+                        label="Email"
+                        name="email"
+                        value={formData.email}
+                        formData={formData}
+                        setFormData={setFormData}
+                        disabledUsername={true}
+                    />
+                </div>
 
                 <div className="flex gap-4">
                     <div className="flex-[3]">
                         <InputBox
                             label="Mobile Number"
+                            className
                             name="mobileNumber"
+                            prefix="+995" // Added this
                             value={formData.mobileNumber}
                             formData={formData}
                             setFormData={setFormData}
