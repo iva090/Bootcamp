@@ -37,6 +37,7 @@ const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
                 setFormData={setFormData}
                 placeholder="you@example.com"
                 error={apiError?.email || localError}
+                needAsterisk={true}
             />
             <button type="submit" className="w-full bg-[#5D51E8] text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2">
                 Next
@@ -80,6 +81,7 @@ const PasswordStep = ({ onNext, formData, setFormData }) => {
                 autocomplete="new-password"
                 placeholder="••••••••"
                 error={errors.password}
+                needAsterisk={true}
             />
             <InputBox
                 label="Confirm Password"
@@ -91,6 +93,7 @@ const PasswordStep = ({ onNext, formData, setFormData }) => {
                 placeholder="••••••••"
                 autocomplete="new-password"
                 error={errors.confirmPassword}
+                needAsterisk={true}
             />
             <button
                 type="submit"
@@ -126,6 +129,7 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
                 setFormData={setFormData}
                 placeholder="Username"
                 error={apiError?.username || localError}
+                needAsterisk={true}
             />
 
             <AvatarUpload

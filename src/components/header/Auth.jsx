@@ -3,12 +3,11 @@ import UserDefault from "../../assets/User.png";
 import useAuthStore from "../../store/useAuthStore";
 import ProfileModal from "../../features/Profile/ProfileModal";
 import { useModal } from "../../hooks/useModal";
-import { use, useEffect } from "react";
 
 export default function Auth() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const user = useAuthStore((state) => state.user.data.user);
     const isProfileFilled = useAuthStore((state) => state.isProfileFilled);
+    const user = useAuthStore((state) => state.user.data.user);
     const profile = useModal();
 
     if (!isLoggedIn) {
