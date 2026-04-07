@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import UserDefault from "../../assets/User.png";
 import useAuthStore from "../../store/useAuthStore";
+import ProfileModal from "../../features/Profile/ProfileModal";
+import { useModal } from "../../hooks/useModal";
 
 export default function Auth() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const user = useAuthStore((state) => state.user);
+    const profile = useModal();
 
     if (!isLoggedIn) {
         return (
@@ -25,10 +28,10 @@ export default function Auth() {
                 </svg>
                 <span className="hidden sm:inline">Enrolled Courses</span>
             </Link>
-
-            {/* Profile Avatar Container */}
             <div className="relative group">
-                <div className="w-10 h-10 rounded-full border-2 border-indigo-100 p-0.5 overflow-hidden cursor-pointer hover:border-indigo-300 transition-all">
+                <div
+                    onClick={profile.openModal}
+                    className="w-10 h-10 rounded-full border-2 border-indigo-100 p-0.5 overflow-hidden cursor-pointer hover:border-indigo-300 transition-all">
                     <img
                         src={user?.avatar || UserDefault}
                         alt={user?.username || "Profile"}
@@ -43,6 +46,7 @@ export default function Auth() {
                     {user?.username}
                 </div>
             </div>
+            <ProfileModal isOpen={profile.isOpen} onClose={profile.closeModal} />
         </div>
     );
 }

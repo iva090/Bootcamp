@@ -2,7 +2,7 @@ import { useModal } from "../../hooks/useModal";
 import { RegisterModal } from "../../features/auth/Registration/RegisterModal"
 import LoginModal from "../../features/auth/Login/LoginModal";
 
-export default function BrowseCourse() {
+export default function NotAuth() {
     const login = useModal();
     const register = useModal();
     return (

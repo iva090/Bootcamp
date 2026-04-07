@@ -18,16 +18,15 @@ const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const error = validate();
-        if (error) {
-            setLocalError(error);
-        } else {
+        if (error) setLocalError(error);
+        else {
             setLocalError("");
             onNext();
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fadeIn">
+        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fadeIn">
             <InputBox
                 label="Email"
                 type="email"
@@ -36,13 +35,9 @@ const EmailStep = ({ onNext, formData, setFormData, apiError }) => {
                 formData={formData}
                 setFormData={setFormData}
                 placeholder="you@example.com"
-                // Prioritize API errors, fallback to local validation errors
                 error={apiError?.email || localError}
             />
-            <button
-                type="submit"
-                className="w-full bg-[#5D51E8] text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2"
-            >
+            <button type="submit" className="w-full bg-[#5D51E8] text-white font-semibold py-3 rounded-xl hover:bg-[#4A3ED1] transition-all mt-2">
                 Next
             </button>
         </form>
@@ -161,25 +156,15 @@ export const RegisterModal = ({ isOpen, onClose }) => {
     });
 
     const { submitRegistration, isLoading, error: apiError } = useRegister((responseData) => {
-        if (responseData?.user) {
+        if (responseData) {
             login(responseData.user);
+            onClose();
+            setTimeout(() => {
+                setStep(1);
+                setFormData({ email: '', username: '', password: '', confirmPassword: '', avatar: null });
+            }, 300);
         }
-
-        onClose();
-
-        setTimeout(() => {
-            setStep(1);
-            setFormData({
-                email: '',
-                username: '',
-                password: '',
-                confirmPassword: '',
-                avatar: null
-            });
-        }, 300);
     });
-
-    if (!isOpen) return null;
 
     const handleFinalSubmit = () => {
         const data = new FormData();
@@ -193,34 +178,48 @@ export const RegisterModal = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 ">
-            <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-[448px] relative">
-                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">✕</button>
-
-                <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
-                    <p className="text-gray-500 text-sm mt-1">Join and start learning today</p>
-                </div>
-
-                <div className="flex gap-2 mb-8">
-                    {[1, 2, 3].map((s) => (
-                        <div key={s} className={`h-1.5 flex-1 rounded-full transition-colors ${step >= s ? 'bg-[#5D51E8]' : 'bg-gray-100'}`} />
-                    ))}
-                </div>
-
-                {step === 1 && <EmailStep onNext={() => setStep(2)} formData={formData} setFormData={setFormData} apiError={apiError} />}
-                {step === 2 && <PasswordStep onNext={() => setStep(3)} formData={formData} setFormData={setFormData} />}
-                {step === 3 && (
-                    <FinalStep
-                        onSubmit={handleFinalSubmit}
-                        formData={formData}
-                        setFormData={setFormData}
-                        isLoading={isLoading}
-                        apiError={apiError}
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="Create Account"
+            subtitle="Join and start learning today"
+        >
+            <div className="flex gap-2 mb-8">
+                {[1, 2, 3].map((s) => (
+                    <div
+                        key={s}
+                        className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${step >= s ? 'bg-[#5D51E8]' : 'bg-gray-100'
+                            }`}
                     />
-                )}
-                <RegFooter />
+                ))}
             </div>
-        </div>
+
+            {step === 1 && (
+                <EmailStep
+                    onNext={() => setStep(2)}
+                    formData={formData}
+                    setFormData={setFormData}
+                    apiError={apiError}
+                />
+            )}
+            {step === 2 && (
+                <PasswordStep
+                    onNext={() => setStep(3)}
+                    formData={formData}
+                    setFormData={setFormData}
+                />
+            )}
+            {step === 3 && (
+                <FinalStep
+                    onSubmit={handleFinalSubmit}
+                    formData={formData}
+                    setFormData={setFormData}
+                    isLoading={isLoading}
+                    apiError={apiError}
+                />
+            )}
+
+            <RegFooter onLoginClick={onClose} />
+        </Modal>
     );
 };
