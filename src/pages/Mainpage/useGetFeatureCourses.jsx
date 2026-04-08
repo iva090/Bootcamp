@@ -1,7 +1,7 @@
 import { useState } from "react";
-import api from "../../axios";
+import api from "../../features/axios";
 
-export const useRegister = (onSuccess) => {
+export const useGetFeaturedCourses = (onSuccess) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -10,9 +10,10 @@ export const useRegister = (onSuccess) => {
         setError(null);
         try {
 
-            const response = await api.post('/register', data);
+            const response = await api.get('/register/featured');
 
             if (onSuccess) onSuccess(response.data);
+            console.log(response.data)
             return { success: true, data: response.data };
         } catch (err) {
             const apiError = err.response?.data?.errors || err.response?.data?.message || "Something went wrong. Please try again";

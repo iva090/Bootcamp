@@ -1,7 +1,7 @@
 import Modal from "../../components/Modal";
 import UserDefault from "../../assets/User.png"
 import useAuthStore from "../../store/useAuthStore";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import InputBox from "../../components/InputBox";
 import AvatarUpload from "../../components/registration/AvatarUpload";
 import { useUpdateProfile } from "../auth/hooks/useUpdateProfile";
@@ -45,7 +45,6 @@ const validateProfile = (values) => {
 export default function ProfileModal({ isOpen, onClose }) {
     const user = useAuthStore((state) => state.user);
     const isProfileFilled = useAuthStore((state) => state.isProfileFilled);
-    console.log(user);
 
     const [formData, setFormData] = useState({
         fullName: "",

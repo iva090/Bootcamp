@@ -1,7 +1,7 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
-import Mainpage from './pages/Mainpage'
-import Catalog from './pages/Catalog'
+import Mainpage from './pages/Mainpage/Mainpage'
+import Catalog from './pages/Catalog/Catalog'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 

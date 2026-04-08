@@ -8,7 +8,6 @@ export default function Auth() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const isProfileFilled = useAuthStore((state) => state.isProfileFilled);
     const user = useAuthStore((state) => state.user);
-    console.log("Profile filled: " + isProfileFilled);
     const profile = useModal();
 
     if (!isLoggedIn) {

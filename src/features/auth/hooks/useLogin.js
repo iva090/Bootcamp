@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "./axios";
+import api from "../../axios";
 
 export const useLogin = (onSuccess) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +13,6 @@ export const useLogin = (onSuccess) => {
             const response = await api.post('/login', data);
 
             if (onSuccess) onSuccess(response.data);
-            console.log(response.data)
             return { success: true, data: response.data };
         } catch (err) {
             const apiError = err.response?.data?.errors || err.response?.data?.message || "Something went wrong";

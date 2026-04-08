@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "./axios";
+import api from "../../axios";
 import useAuthStore from "../../../store/useAuthStore";
 
 export const useUpdateProfile = (onSuccess) => {
@@ -28,7 +28,6 @@ export const useUpdateProfile = (onSuccess) => {
             updateProfile(response.data);
 
             if (onSuccess) onSuccess(response.data);
-            console.log(response.data)
             return { success: true, data: response.data };
         } catch (err) {
             const apiError = err.response?.data?.errors || err.response?.data?.message;
