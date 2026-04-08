@@ -4,7 +4,7 @@ import Logo from '../../assets/Logo.png'
 export default function Footer() {
     return (
         <footer className="bg-[#F3F4F6] pt-16 font-sans border-t border-gray-300">
-            <div className="max-w-[1600px] mx-auto flex flex-wrap justify-between items-start gap-y-12 mb-10">
+            <div className="px-50 mx-auto flex flex-wrap justify-between items-start gap-y-12 mb-10">
                 <div className="flex flex-col gap-5">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-[#4F46E5] flex items-center justify-center shadow-sm">
