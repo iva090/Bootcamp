@@ -162,7 +162,8 @@ export const RegisterModal = ({ isOpen, onClose }) => {
 
     const { submitRegistration, isLoading, error: apiError } = useRegister((responseData) => {
         if (responseData) {
-            login(responseData.user);
+            login(responseData);
+
             onClose();
             setTimeout(() => {
                 setStep(1);

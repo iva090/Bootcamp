@@ -25,7 +25,7 @@ export const useUpdateProfile = (onSuccess) => {
 
             const response = await api.put('/profile', formData);
 
-            UpdateProfile(response.data);
+            updateProfile(response.data);
 
             if (onSuccess) onSuccess(response.data);
             console.log(response.data)

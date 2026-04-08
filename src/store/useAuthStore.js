@@ -10,25 +10,36 @@ const useAuthStore = create(
             token: null,
 
             login: (userData, token) => {
-                if (token) localStorage.setItem('auth_token', token);
-                set({ isLoggedIn: true, user: userData, token: token })
+                const flatUser = userData?.data?.user || userData?.user || userData;
+
+                const actualToken = token || userData?.data?.token;
+
+                if (actualToken) localStorage.setItem('auth_token', actualToken);
+
+                set({
+                    isLoggedIn: true,
+                    user: flatUser,
+                    token: actualToken,
+                    isProfileFilled: !!flatUser?.profileComplete
+                });
             },
+
+            updateProfile: (newData) => set((state) => {
+                const flatUpdate = newData?.data || newData;
+                return {
+                    ...state,
+                    user: { ...state.user, ...flatUpdate },
+                    isProfileFilled: true
+                };
+            }),
+
             logout: () => {
                 localStorage.removeItem('auth_token');
-                set({ isLoggedIn: false, user: null });
+                set({ isLoggedIn: false, user: null, token: null, isProfileFilled: false });
             },
-
-            updateProfile: (newData) => set((state) => ({
-                user: { ...state.user, ...newData }
-            })),
-
-            fillProfile: () => set({ isProfileFilled: true }),
         }),
-        {
-            name: 'auth-storage',
-        }
+        { name: 'auth-storage' }
     )
-
 );
 
 export default useAuthStore;

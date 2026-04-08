@@ -43,8 +43,9 @@ const validateProfile = (values) => {
 };
 
 export default function ProfileModal({ isOpen, onClose }) {
-    const user = useAuthStore((state) => state.user?.data?.user);
-    const isProfileFilled = user?.profileComplete || false;
+    const user = useAuthStore((state) => state.user);
+    const isProfileFilled = useAuthStore((state) => state.isProfileFilled);
+    console.log(user);
 
     const [formData, setFormData] = useState({
         fullName: "",

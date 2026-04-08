@@ -7,8 +7,8 @@ import { useModal } from "../../hooks/useModal";
 export default function Auth() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const isProfileFilled = useAuthStore((state) => state.isProfileFilled);
-    const user = useAuthStore((state) => state.user?.data?.user);
-    console.log(user)
+    const user = useAuthStore((state) => state.user);
+    console.log("Profile filled: " + isProfileFilled);
     const profile = useModal();
 
     if (!isLoggedIn) {
