@@ -21,7 +21,6 @@ export default function FeaturedCourses() {
         handleLoad();
     }, [])
 
-    console.log(courses)
 
     return (
         <section className="flex mx-auto" >

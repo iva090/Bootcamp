@@ -13,7 +13,7 @@ export default function Card({ Image, Lecturer, Title, Description, Price, Ratin
                 <span className="text-xs text-gray-500 font-medium">Lecturer {Lecturer}</span>
                 <div className="flex items-center text-orange-400 text-sm font-bold">
                     <span className="mr-1">★</span>
-                    <span className="text-gray-800">{Rating}</span>
+                    <span className="text-gray-800">{Rating || "N/A"}</span>
                 </div>
             </div>
 
