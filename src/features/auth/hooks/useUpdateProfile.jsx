@@ -3,7 +3,6 @@ import api from "../../axios";
 import useAuthStore from "../../../store/useAuthStore";
 
 export const useUpdateProfile = (onSuccess) => {
-    const user = useAuthStore((state) => state.user);
     const updateProfile = useAuthStore((state) => state.updateProfile);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);

@@ -3,7 +3,7 @@ import { useGetFeaturedCourses } from "./useGetFeatureCourses";
 import Card from "../../components/Card";
 
 export default function FeaturedCourses() {
-    const { fetchFeaturedCourses, isLoading, error } = useGetFeaturedCourses();
+    const { fetchFeaturedCourses } = useGetFeaturedCourses();
 
     const [courses, setCourses] = useState([]);
 
