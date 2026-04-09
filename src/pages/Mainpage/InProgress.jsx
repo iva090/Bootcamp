@@ -1,5 +1,6 @@
 import useAuthStore from "../../store/useAuthStore";
 import MockCard from "./MockCard";
+import SignInOverlay from "./SignInOverlay";
 
 export default function InProgress() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -10,10 +11,13 @@ export default function InProgress() {
                 <div>
 
                 </div> :
-                <div className="flex gap-3 blur-md">
-                    <MockCard />
-                    <MockCard />
-                    <MockCard />
+                <div className="relative">
+                    <div className="flex gap-3 blur-md">
+                        <MockCard />
+                        <MockCard />
+                        <MockCard />
+                    </div>
+                    <SignInOverlay />
                 </div>
             }
         </div>

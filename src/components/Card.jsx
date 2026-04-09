@@ -25,9 +25,11 @@ export default function Card({ Image, Lecturer, Title, Description, Price, Ratin
             </p>
 
             <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-50">
-                <div className="flex flex-col">
+                <div className="flex items-center gap-2">
                     <span className="text-[10px] text-gray-400 uppercase tracking-wider">Starting from</span>
-                    <span className="text-2xl font-bold text-gray-900">${Price}</span>
+                    <span className="text-2xl font-bold text-gray-900">
+                        ${Number(Price || 0).toFixed(0)}
+                    </span>
                 </div>
                 <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors">
                     Details
