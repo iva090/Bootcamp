@@ -19,7 +19,7 @@ export const useGetCourses = () => {
             const courseData = response.data.data || [];
             setCourses(courseData);
             setTotalCourses(response.data.total || courseData.length);
-
+            console.log(response.data)
             return { success: true, data: response.data };
         } catch (err) {
             const apiError = err.response?.data?.message || "Failed to load courses";

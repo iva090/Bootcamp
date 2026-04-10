@@ -1,32 +1,67 @@
+import { useEffect, useState, useCallback } from "react";
 import PathBar from "../../components/pathbar";
 import Filter from "./Filter";
+import { useGetCourses } from "./useGetCourses";
+import Courses from "./Courses";
 
 export default function Catalog() {
+    const { courses, totalCourses, fetchCourses, isLoading } = useGetCourses();
 
+    const [activeFilters, setActiveFilters] = useState({
+        "categories[]": [],
+        "topics[]": [],
+        "instructors[]": [],
+        sort: "newest"
+    });
+
+    useEffect(() => {
+        fetchCourses(activeFilters);
+    }, [activeFilters, fetchCourses]);
+
+    const handleFilterUpdate = useCallback((type, id) => {
+        setActiveFilters(prev => {
+            const currentList = prev[type] || [];
+            const isSelected = currentList.includes(id);
+
+            return {
+                ...prev,
+                [type]: isSelected
+                    ? currentList.filter(itemId => itemId !== id)
+                    : [...currentList, id]
+            };
+        });
+    }, []);
+
+    const clearAll = useCallback(() => {
+        setActiveFilters({
+            "categories[]": [],
+            "topics[]": [],
+            "instructors[]": [],
+            sort: "newest"
+        });
+    }, []);
 
     return (
-        <div className="px-10 px-40 mt-10">
+        <div className="px-10 lg:px-40 mt-10">
             <PathBar />
 
             <div className="flex gap-10 mt-8">
-
-                <aside className="w-90 flex-shrink-0">
-                    <Filter />
+                <aside className="w-80 flex-shrink-0">
+                    <Filter
+                        activeFilters={activeFilters}
+                        onFilterChange={handleFilterUpdate}
+                        onClear={clearAll}
+                    />
                 </aside>
 
                 <main className="flex-1">
-                    <div className="flex justify-between items-center mt-2 mb-6">
-                        <h2 className="text-gray-500">Showing 9 out of 90</h2>
-                    </div>
-
-                    <div className="grid grid-cols-1 grid-cols-3 gap-6">
-                        <div className="h-64 bg-gray-100 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-400">
-                            Course Card Placeholder
-                        </div>
-                    </div>
+                    <Courses
+                        courses={courses}
+                        totalCourses={totalCourses}
+                        isLoading={isLoading}
+                    />
                 </main>
-
             </div>
         </div>
-    )
+    );
 }
