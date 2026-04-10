@@ -9,11 +9,11 @@ export default function FilterButton({
         <button
             onClick={onClick}
             className={`
-        group flex items-center gap-2 px-4 py-2 border rounded-xl shadow-sm 
+        group flex items-center gap-2 px-4 py-2 border border-none rounded-xl shadow-sm 
         font-medium transition-all duration-200 text-sm
         ${isActive
                     ? 'bg-[#f1f0ff] text-[#5d51e8] border-[#5d51e8]/50 shadow-md'
-                    : 'bg-white text-gray-600 border-gray-100 hover:bg-[#f1f0ff] hover:text-[#5d51e8] hover:border-[#5d51e8]/30 hover:shadow-md'
+                    : 'bg-white text-gray-600 hover:bg-[#f1f0ff] hover:text-[#5d51e8] hover:border-[#5d51e8]/30 hover:shadow-md'
                 }
       `}
         >
