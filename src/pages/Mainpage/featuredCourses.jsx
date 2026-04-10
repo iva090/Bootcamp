@@ -23,7 +23,7 @@ export default function FeaturedCourses() {
 
 
     return (
-        <section className="flex mx-auto" >
+        <section className="flex mx-auto">
             <div className="grid grid-cols-3 gap-8">
                 {courses?.map((course) => (
                     <Card key={course.id} Image={course.image} Lecturer={course.instructor.name} Title={course.title} Description={course.description} Price={course.basePrice} Rating={course.avgRating} />

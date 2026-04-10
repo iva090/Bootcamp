@@ -20,7 +20,7 @@ export default function Card({ Image, Lecturer, Title, Description, Price, Ratin
             <h3 className="text-xl font-bold text-gray-900 mb-2">
                 {Title}
             </h3>
-            <p className="text-gray-500 text-sm mb-6 line-clamp-3">
+            <p className="text-gray-500 text-md mb-6 line-clamp-3">
                 {Description}
             </p>
 
