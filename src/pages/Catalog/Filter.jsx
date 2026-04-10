@@ -32,7 +32,6 @@ const IconMap = {
 };
 
 export default function Filter({ activeFilters, onFilterChange, onClear }) {
-    // 1. Fetch metadata using your existing hook
     const { data: categories, fetchFilters: getCategories } = useGetFilters("categories");
     const { data: topics, fetchFilters: getTopics } = useGetFilters("topics");
     const { data: instructors, fetchFilters: getInstructors } = useGetFilters("instructors");

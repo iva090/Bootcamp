@@ -4,6 +4,7 @@ import api from "../../features/axios";
 export const useGetCourses = () => {
     const [courses, setCourses] = useState([]);
     const [totalCourses, setTotalCourses] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -16,11 +17,15 @@ export const useGetCourses = () => {
                 params: filters
             });
 
-            const courseData = response.data.data || [];
+            const root = response.data;
+            const courseData = root.data || [];
+            const meta = root.meta || {};
+
             setCourses(courseData);
-            setTotalCourses(response.data.total || courseData.length);
-            console.log(response.data)
-            return { success: true, data: response.data };
+            setTotalCourses(meta.total || courseData.length);
+            setTotalPages(meta.lastPage || 1);
+
+            return { success: true, data: root };
         } catch (err) {
             const apiError = err.response?.data?.message || "Failed to load courses";
             setError(apiError);
@@ -30,5 +35,5 @@ export const useGetCourses = () => {
         }
     }, []);
 
-    return { courses, totalCourses, fetchCourses, isLoading, error };
+    return { courses, totalCourses, totalPages, fetchCourses, isLoading, error };
 };

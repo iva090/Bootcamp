@@ -4,7 +4,7 @@ import InProgress from "./InProgress";
 
 export default function Mainpage() {
     return (
-        <div className="px-50 mt-10">
+        <div className="px-50 py-15">
             <div className="mb-15">
                 <CourseCarousel />
             </div>
