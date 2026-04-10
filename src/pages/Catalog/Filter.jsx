@@ -1,11 +1,14 @@
 import { useEffect } from "react"
 import { useGetFilters } from "./useGetFilters";
 import { Code, Palette, LineChart, Database, Lightbulb } from "lucide-react";
+import FilterButton from "./FilterButton";
 
 export default function Filter() {
     const { data: categories, fetchFilters: getCategories } = useGetFilters("categories")
     const { data: topics, fetchFilters: getTopics } = useGetFilters("topics")
     const { data: instructors, fetchFilters: getInstructors } = useGetFilters("instructors")
+
+    console.log(instructors)
 
     const Icon_map = {
         "development": <Code size={18} />,
@@ -26,17 +29,13 @@ export default function Filter() {
             <div>
                 <p className="font-bold mb-4">Categories</p>
                 <div className="flex flex-wrap gap-2">
-                    {categories.data?.map((category) => (
-                        <button
-                            key={category.id}
-                            className="group flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl shadow-sm text-gray-600 font-medium transition-all duration-200 hover:bg-[#f1f0ff] hover:text-[#5d51e8] hover:border-[#5d51e8]/30 hover:shadow-md"
-                        >
-                            <span className="text-gray-400 group-hover:text-[#5d51e8] transition-colors">
-                                {Icon_map[category.icon] || <Code size={18} />}
-                            </span>
-
-                            <span>{category.name}</span>
-                        </button>
+                    {categories.data?.map((cat) => (
+                        <FilterButton
+                            key={cat.id}
+                            label={cat.name}
+                            icon={Icon_map[cat.icon]}
+                            onClick={() => handleFilter(cat.id)}
+                        />
                     ))}
                 </div>
             </div>
@@ -44,12 +43,24 @@ export default function Filter() {
                 <p className="font-bold mb-4">Topics</p>
                 <div className="flex flex-wrap gap-2">
                     {topics.data?.map((topic) => (
-                        <button
+                        <FilterButton
                             key={topic.id}
-                            className="px-4 py-2 bg-white border border-gray-100 rounded-xl text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors"
-                        >
-                            {topic.name}
-                        </button>
+                            label={topic.name}
+                            onClick={() => handleFilter(topic.id)}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div>
+                <p className="font-bold mb-4">Instructors</p>
+                <div className="flex flex-col w-max gap-1.5">
+                    {instructors.data?.map((inst) => (
+                        <FilterButton
+                            key={inst.id}
+                            label={inst.name}
+                            image={inst.avatar}
+                            onClick={() => handleFilter(inst.id)}
+                        />
                     ))}
                 </div>
             </div>
