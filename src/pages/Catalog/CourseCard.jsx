@@ -32,7 +32,7 @@ export default function CourseCard({ Image, Lecturer, Duration, Title, Category,
     const CategoryIcon = IconMap[categoryKey] || IconMap['development'];
 
     return (
-        <div className="flex flex-col bg-white rounded-3xl p-5 w-full shadow-sm border border-gray-100 min-h-[480px]">
+        <div className="flex flex-col hover:cursor-pointer bg-white rounded-3xl p-5 w-full shadow-sm border border-gray-100 min-h-[480px]">
             <div className="rounded-2xl overflow-hidden mb-4 shrink-0">
                 <img
                     src={Image}
@@ -50,7 +50,7 @@ export default function CourseCard({ Image, Lecturer, Duration, Title, Category,
                 </div>
             </div>
 
-            <h3 className="text-[30px] font-semibold text-gray-950 mb-3 leading-tight line-clamp-2">
+            <h3 className="text-[25px] font-semibold text-gray-950 mb-3 leading-tight line-clamp-2">
                 {Title}
             </h3>
 
@@ -74,7 +74,7 @@ export default function CourseCard({ Image, Lecturer, Duration, Title, Category,
                     </span>
                 </div>
 
-                <button className="bg-[#5D51E8] hover:bg-[#4a40d1] text-white px-7 py-3 rounded-2xl font-bold text-sm transition-all active:scale-95">
+                <button className="bg-[#5D51E8] hover:cursor-pointer hover:bg-[#4a40d1] text-white px-7 py-3 rounded-2xl font-bold text-sm transition-all active:scale-95">
                     Details
                 </button>
             </div>

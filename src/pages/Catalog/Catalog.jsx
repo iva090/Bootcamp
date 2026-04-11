@@ -6,6 +6,7 @@ import Courses from "./Courses";
 
 export default function Catalog() {
     const { courses, totalCourses, totalPages, fetchCourses, isLoading } = useGetCourses();
+    const [sortBy, setSortBy] = useState("newest");
 
     const [activeFilters, setActiveFilters] = useState({
         "categories[]": [],
@@ -18,6 +19,14 @@ export default function Catalog() {
     useEffect(() => {
         fetchCourses(activeFilters);
     }, [activeFilters, fetchCourses]);
+
+    const handleSortChange = useCallback((newSort) => {
+        setActiveFilters(prev => ({
+            ...prev,
+            sort: newSort,
+            page: 1
+        }));
+    }, []);
 
     const handlePageChange = useCallback((newPage) => {
         setActiveFilters(prev => ({ ...prev, page: newPage }));
@@ -64,6 +73,8 @@ export default function Catalog() {
                         isLoading={isLoading}
                         currentPage={activeFilters.page}
                         onPageChange={handlePageChange}
+                        currentSort={activeFilters.sort}
+                        onSortChange={handleSortChange}
                     />
                 </main>
             </div>

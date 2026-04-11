@@ -1,16 +1,8 @@
 import CourseCard from "./CourseCard";
 import Pagination from "./Pagination";
+import SortDropdown from "./SortDropdown";
 
-export default function Courses({ courses, totalCourses, totalPages, isLoading, currentPage, onPageChange }) {
-    if (isLoading) {
-        return (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[1, 2, 3, 4, 5, 6].map((n) => (
-                    <div key={n} className="h-64 bg-gray-100 animate-pulse rounded-xl" />
-                ))}
-            </div>
-        );
-    }
+export default function Courses({ courses, totalCourses, totalPages, isLoading, currentPage, onPageChange, currentSort, onSortChange }) {
 
     const itemsPerPage = 9;
 
@@ -20,9 +12,10 @@ export default function Courses({ courses, totalCourses, totalPages, isLoading, 
                 <h2 className="text-gray-500">
                     Showing {courses.length} out of {totalCourses}
                 </h2>
+                <SortDropdown currentSort={currentSort} onSortChange={onSortChange} />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-6">
                 {courses.length > 0 ? (
                     courses.map((course) => (
                         <CourseCard
