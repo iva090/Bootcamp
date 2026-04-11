@@ -4,6 +4,7 @@ import Mainpage from './pages/Mainpage/Mainpage'
 import Catalog from './pages/Catalog/Catalog'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
+import CoursePage from './pages/Course/CoursePage'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Mainpage />} />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="course/:id" element={<CoursePage />} />
         </Routes>
       </main>
       <Footer />

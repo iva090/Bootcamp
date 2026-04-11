@@ -1,4 +1,9 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCourseDetails } from "./getCourseDetails";
+import PathBar from "../../components/pathbar";
+import Enrollment from "./Enrollment";
+import Authorization from "./Authorization";
 
 const IconMap = {
     development: (
@@ -29,60 +34,78 @@ const IconMap = {
     ),
 };
 
-export default function CourseCard({ Id, Image, Lecturer, Duration, Title, Category, Price, Rating }) {
-    const categoryKey = Category?.toLowerCase().replace(/\s+/g, '-');
+export default function CoursePage() {
+    const { id } = useParams();
+    const [course, setCourse] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchDetails = async () => {
+            try {
+                const data = await getCourseDetails(id);
+                setCourse(data);
+            } catch (err) {
+                console.error(err)
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchDetails();
+    }, [id]);
+
+
+    if (loading) return <div className="p-20 text-center text-gray-500">Loading Course...</div>;
+    if (!course) return <div className="p-20 text-center">Course not found.</div>;
+    const categoryKey = course.category.name?.toLowerCase().replace(/\s+/g, '-');
     const CategoryIcon = IconMap[categoryKey] || IconMap['development'];
 
     return (
-        <Link to={`/course/${Id}`} className="flex flex-col hover:cursor-pointer bg-white rounded-3xl p-5 w-full shadow-sm border border-gray-100 min-h-[480px]">
-            <div className="rounded-2xl overflow-hidden mb-4 shrink-0">
-                <img
-                    src={Image}
-                    alt={Title}
-                    className="w-full h-48 object-cover"
-                />
-            </div>
-            <div className="flex justify-between items-center mb-2">
-                <div className="text-xs text-gray-400">
-                    {Lecturer} <span className="mx-1 text-gray-400">|</span> {Duration} Weeks
-                </div>
-                <div className="flex items-center gap-1 text-gray-900 font-bold">
-                    <span className="text-orange-400"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.2932 8.17501C17.4349 8.47691 17.7177 8.68831 18.0474 8.73867L23.888 9.63081C24.6926 9.75372 25.0212 10.7351 24.4527 11.3177L20.1644 15.7128C19.9427 15.94 19.8421 16.259 19.8932 16.5722L20.8972 22.7252C21.0317 23.5491 20.1571 24.1653 19.4265 23.7615L14.2957 20.9255C13.9946 20.7591 13.6292 20.7591 13.3281 20.9255L8.19806 23.7614C7.46751 24.1653 6.59295 23.5492 6.72729 22.7253L7.73067 16.5722C7.78175 16.2589 7.6811 15.9401 7.45946 15.7129L3.17106 11.3177C2.60263 10.7351 2.93119 9.75372 3.73581 9.63081L9.57636 8.73867C9.90604 8.68831 10.1889 8.47691 10.3306 8.17501L12.9066 2.68645C13.2666 1.91962 14.3572 1.91962 14.7171 2.68645L17.2932 8.17501Z" fill="#F4A316" />
-                    </svg>
-                    </span>
-                    <span>{Rating?.toFixed(1)}</span>
-                </div>
+        <div className="mx-auto px-6 py-8 px-50 py-15 font-sans bg-[#F9FAFB]">
+            <div className="mb-8">
+                <PathBar courseName={course.category.name} />
+                <h1 className="text-3xl font-bold mt-4 text-gray-900">{course.title}</h1>
             </div>
 
-            <h3 className="text-[25px] font-semibold text-gray-950 mb-3 leading-tight line-clamp-2">
-                {Title}
-            </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div className="lg:col-span-2">
+                    <div className="relative rounded-2xl overflow-hidden mb-6">
+                        <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-[450px] object-cover"
+                        />
+                    </div>
 
-            <div className="flex-grow"></div>
+                    <div className="flex flex-wrap items-center gap-6 mb-8 text-gray-500 text-sm">
+                        <div className="flex items-center gap-2">
+                            <span>{course.durationWeeks} Weeks</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-900 font-bold">{course.rating || 'N/A'}</span>
+                        </div>
+                        <div className="bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
+                            <span>{CategoryIcon}</span> {course.category.name}
+                        </div>
+                    </div>
 
-            <div className="mb-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#f5f5f5] rounded-xl text-gray-500 text-lg font-semibold">
-                    <span className="w-6 h-6 flex items-center justify-center">
-                        {CategoryIcon}
-                    </span>
-                    {Category}
-                </span>
-            </div>
-            <div className="flex justify-between items-end">
-                <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                        Starting from
-                    </span>
-                    <span className="text-2xl font-semibold text-gray-700 leading-none">
-                        ${Price}
-                    </span>
+                    <div className="flex items-center gap-3 bg-white w-fit p-2 pr-4 rounded-xl shadow-sm border border-gray-100 mb-8">
+                        <img src={course.instructor.avatar} className="w-8 h-8 rounded-full object-cover" alt="avatar" />
+                        <span className="text-sm font-medium text-gray-700">{course.instructor.name}</span>
+                    </div>
+
+                    <div>
+                        <h2 className="text-xl font-bold mb-4 text-gray-900">Course Description</h2>
+                        <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                            {course.description}
+                        </p>
+                    </div>
                 </div>
 
-                <button className="bg-[#5D51E8] hover:cursor-pointer hover:bg-[#4a40d1] text-white px-7 py-3 rounded-2xl font-bold text-sm transition-all active:scale-95">
-                    Details
-                </button>
+                <div className="flex flex-col gap-6">
+                    <Enrollment basePrice={Math.floor(course.basePrice)} />
+                    <Authorization />
+                </div>
             </div>
-        </Link>
+        </div>
     );
 }

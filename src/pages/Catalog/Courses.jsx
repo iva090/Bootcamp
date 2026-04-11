@@ -20,6 +20,7 @@ export default function Courses({ courses, totalCourses, totalPages, isLoading, 
                     courses.map((course) => (
                         <CourseCard
                             key={course.id}
+                            Id={course.id}
                             Image={course.image}
                             Lecturer={course.instructor.name}
                             Title={course.title}
