@@ -54,13 +54,17 @@ export default function CoursePage() {
     }, [id]);
 
 
+
     if (loading) return <div className="p-20 text-center text-gray-500">Loading Course...</div>;
     if (!course) return <div className="p-20 text-center">Course not found.</div>;
+    const averageRating = course.reviews?.length > 0
+        ? (course.reviews.reduce((acc, curr) => acc + curr.rating, 0) / course.reviews.length).toFixed(1)
+        : "0.0";
     const categoryKey = course.category.name?.toLowerCase().replace(/\s+/g, '-');
     const CategoryIcon = IconMap[categoryKey] || IconMap['development'];
 
     return (
-        <div className="mx-auto px-6 py-8 px-50 py-15 font-sans bg-[#F9FAFB]">
+        <div className="mx-auto px-6 py-8 px-50 py-15 font-sans bg-[#f5f5f5]">
             <div className="mb-8">
                 <PathBar courseName={course.category.name} />
                 <h1 className="text-3xl font-bold mt-4 text-gray-900">{course.title}</h1>
@@ -76,14 +80,30 @@ export default function CoursePage() {
                         />
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-6 mb-8 text-gray-500 text-sm">
-                        <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-4 mb-8 text-gray-500 text-sm">
+                        <div className="flex items-center gap-1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 4H17V2H15V4H9V2H7V4H5C3.9 4 3 4.9 3 6V20C3 21.1 3.9 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM5 20V8H19V6V20H5Z" fill="#525252" />
+                            </svg>
                             <span>{course.durationWeeks} Weeks</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-gray-900 font-bold">{course.rating || 'N/A'}</span>
+                        <div className="flex items-center gap-1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.5 12H12V7M3 12C3 13.1819 3.23279 14.3522 3.68508 15.4442C4.13738 16.5361 4.80031 17.5282 5.63604 18.364C6.47177 19.1997 7.46392 19.8626 8.55585 20.3149C9.64778 20.7672 10.8181 21 12 21C13.1819 21 14.3522 20.7672 15.4442 20.3149C16.5361 19.8626 17.5282 19.1997 18.364 18.364C19.1997 17.5282 19.8626 16.5361 20.3149 15.4442C20.7672 14.3522 21 13.1819 21 12C21 10.8181 20.7672 9.64778 20.3149 8.55585C19.8626 7.46392 19.1997 6.47177 18.364 5.63604C17.5282 4.80031 16.5361 4.13738 15.4442 3.68508C14.3522 3.23279 13.1819 3 12 3C10.8181 3 9.64778 3.23279 8.55585 3.68508C7.46392 4.13738 6.47177 4.80031 5.63604 5.63604C4.80031 6.47177 4.13738 7.46392 3.68508 8.55585C3.23279 9.64778 3 10.8181 3 12Z" stroke="#525252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span>{course.hours} Hours</span>
                         </div>
-                        <div className="bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
+
+                        <div className="flex-1"></div>
+
+                        <div className="flex items-center gap-1">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M17.2932 8.17501C17.4349 8.47691 17.7177 8.68831 18.0474 8.73867L23.888 9.63081C24.6926 9.75372 25.0212 10.7351 24.4527 11.3177L20.1644 15.7128C19.9427 15.94 19.8421 16.259 19.8932 16.5722L20.8972 22.7252C21.0317 23.5491 20.1571 24.1653 19.4265 23.7615L14.2957 20.9255C13.9946 20.7591 13.6292 20.7591 13.3281 20.9255L8.19806 23.7614C7.46751 24.1653 6.59295 23.5492 6.72729 22.7253L7.73067 16.5722C7.78175 16.2589 7.6811 15.9401 7.45946 15.7129L3.17106 11.3177C2.60263 10.7351 2.93119 9.75372 3.73581 9.63081L9.57636 8.73867C9.90604 8.68831 10.1889 8.47691 10.3306 8.17501L12.9066 2.68645C13.2666 1.91962 14.3572 1.91962 14.7171 2.68645L17.2932 8.17501Z" fill="#F4A316" />
+                            </svg>
+
+                            <span className="text-gray-900 ">{course.rating || averageRating || "N/A"}</span>
+                        </div>
+                        <div className="bg-white px-4 py-2 rounded-lg flex items-center gap-2">
                             <span>{CategoryIcon}</span> {course.category.name}
                         </div>
                     </div>
@@ -102,7 +122,7 @@ export default function CoursePage() {
                 </div>
 
                 <div className="flex flex-col gap-6">
-                    <Enrollment basePrice={Math.floor(course.basePrice)} />
+                    <Enrollment courseId={id} basePrice={Math.floor(course.basePrice)} />
                     <Authorization />
                 </div>
             </div>
