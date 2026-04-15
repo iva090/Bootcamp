@@ -52,7 +52,7 @@ function WeeklyScheduleStep({ courseId, isOpen, onOpen, selectedId, onSelect }) 
                             ? 'border-[#5c52e5] bg-blue-50/30' : 'border-gray-300'
                             }`}
                     >
-                        <span className="font-bold text-sm text-gray-800">{shortenDays(s.label)}</span>
+                        <span className="font-semibold text-sm text-gray-800">{shortenDays(s.label)}</span>
                     </button>
                 ))}
             </div>
@@ -115,7 +115,7 @@ function TimeSlotStep({ courseId, weeklyId, isOpen, onOpen, selectedId, onSelect
                             >
                                 {getIcon(name)}
                                 <div className="flex flex-col text-left">
-                                    <span className="font-bold text-sm text-gray-800">{name}</span>
+                                    <span className="font-semibold text-sm text-gray-800">{name}</span>
                                     <span className="text-xs text-gray-400">{formattedTime}</span>
                                 </div>
                             </button>
@@ -173,16 +173,21 @@ export default function Enrollment({ courseId }) {
     const [selectedTimeSlotId, setSelectedTimeSlotId] = useState(null);
     const [selectedSession, setSelectedSession] = useState(null);
     const [courseBasePrice, setCourseBasePrice] = useState(0);
+    const [courseName, setCourseName] = useState("");
     const success = useModal();
 
     useEffect(() => {
         const fetchCourse = async () => {
+            if (!courseId) return;
             try {
                 const res = await api.get(`/courses/${courseId}`);
                 setCourseBasePrice(Number(res.data.data.basePrice) || 0);
-            } catch (err) { console.error(err); }
+                setCourseName(res.data.data.title)
+            } catch (err) {
+                console.error("Failed to fetch course price:", err);
+            }
         };
-        if (courseId) fetchCourse();
+        fetchCourse();
     }, [courseId]);
 
     const extraPrice = selectedSession?.priceModifier
@@ -264,7 +269,7 @@ export default function Enrollment({ courseId }) {
                 onEnroll={handleEnroll}
             />
 
-            <SuccessModal isOpen={success.isOpen} onClose={success.closeModal} />
+            <SuccessModal isOpen={true} onClose={success.closeModal} courseName={courseName} />
         </div>
     );
 }
