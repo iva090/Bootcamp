@@ -1,6 +1,6 @@
 import { AlertTriangle } from 'lucide-react';
 
-export default function PriceSummary({ base = 0, extra = 0, onEnroll, canEnroll, needsAuth }) {
+export default function PriceSummary({ base = 0, extra = 0, onEnroll, canEnroll }) {
     const total = (Number(base) + Number(extra)).toFixed(2);
 
     return (
@@ -25,25 +25,13 @@ export default function PriceSummary({ base = 0, extra = 0, onEnroll, canEnroll,
                 disabled={!canEnroll}
                 onClick={onEnroll}
                 className={`w-full py-4 rounded-2xl font-bold mt-8 transition-colors ${!canEnroll
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-[#f0efff] text-[#5c52e5] hover:bg-[#e6e4ff]'
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-[#f0efff] text-[#5c52e5] hover:bg-[#e6e4ff]'
                     }`}
             >
                 Enroll Now
             </button>
 
-            {needsAuth && (
-                <div className="mt-4 p-4 bg-orange-50 rounded-2xl flex items-center gap-3">
-                    <AlertTriangle size={20} className="text-orange-500" />
-                    <div className="flex-1">
-                        <p className="text-xs font-bold text-gray-800">Authentication Required</p>
-                        <p className="text-[10px] text-gray-500">Please complete your profile to enroll.</p>
-                    </div>
-                    <button className="bg-white px-4 py-2 rounded-lg text-xs font-bold border border-gray-100 shadow-sm text-[#5c52e5]">
-                        Sign In
-                    </button>
-                </div>
-            )}
         </div>
     );
 }

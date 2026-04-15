@@ -57,6 +57,8 @@ export default function CoursePage() {
 
     if (loading) return <div className="p-20 text-center text-gray-500">Loading Course...</div>;
     if (!course) return <div className="p-20 text-center">Course not found.</div>;
+
+    const isEnrolled = !!course.enrollment;
     const averageRating = course.reviews?.length > 0
         ? (course.reviews.reduce((acc, curr) => acc + curr.rating, 0) / course.reviews.length).toFixed(1)
         : "0.0";
@@ -122,7 +124,20 @@ export default function CoursePage() {
                 </div>
 
                 <div className="flex flex-col gap-6">
-                    <Enrollment courseId={id} basePrice={Math.floor(course.basePrice)} />
+                    {isEnrolled ? (
+                        <div className="bg-green-50 border border-green-200 rounded-3xl p-6 shadow-sm">
+                            <h3 className="text-green-800 font-bold text-lg mb-2">You are enrolled!</h3>
+                            <p className="text-green-700 text-sm mb-4">
+                                You are already a student of this course. Check your dashboard for materials.
+                            </p>
+                            <button className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-colors">
+                                Go to My Courses
+                            </button>
+                        </div>
+                    ) : (
+                        <Enrollment courseId={id} basePrice={Math.floor(course.basePrice)} />
+                    )}
+
                     <Authorization />
                 </div>
             </div>
