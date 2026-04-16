@@ -1,16 +1,16 @@
-# React + Vite
+# RedBerry Bootcamp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site for choosing courses, made by the figma template
 
-Currently, two official plugins are available:
+Tech Stack:
+React.js: For building a dynamic, component-based user interface.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Tailwind CSS: For rapid UI development using utility-first styling and responsive design.
 
-## React Compiler
+Zustand: A lightweight, fast state management library (used for useAuthStore to manage user sessions).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Axios: For handling asynchronous HTTP requests to the backend API.
 
-## Expanding the ESLint configuration
+React Hooks: Heavy use of useState, useEffect, and custom hooks (like useModal) for clean logic separation.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Lucide React / SVG Icons: For scalable, crisp UI iconography.
