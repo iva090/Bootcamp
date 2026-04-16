@@ -80,7 +80,7 @@ export default function CoursePage() {
                         <img
                             src={course.image}
                             alt={course.title}
-                            className="w-full h-[450px] object-cover"
+                            className="w-full h-[474px] object-cover"
                         />
                     </div>
 
@@ -118,7 +118,7 @@ export default function CoursePage() {
                     </div>
 
                     <div>
-                        <h2 className="text-xl font-bold mb-4 text-gray-900">Course Description</h2>
+                        <h2 className="text-xl mb-4 font-semibold text-gray-500">Course Description</h2>
                         <p className="text-gray-600 leading-relaxed whitespace-pre-line">
                             {course.description}
                         </p>
@@ -134,7 +134,9 @@ export default function CoursePage() {
                                 type: course.enrollment.schedule.sessionType.name,
                                 location: course.enrollment.schedule.location
                             }}
+                            isCompeleted={course.enrollment.completedAt}
                             progress={course.enrollment.progress}
+                            courseId={course.id}
                         />
                     ) : (
                         <Enrollment courseId={id} basePrice={Math.floor(course.basePrice)} />

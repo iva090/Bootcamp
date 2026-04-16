@@ -1,7 +1,7 @@
 import WarningIcon from "../../assets/Conflict_Icon.png"
 import NotifModal from "../../components/notifModal";
 
-export default function ConflictModal({ isOpen, onClose, onContinue, conflictInfo }) {
+export default function ConflictModal({ isOpen, onClose, onContinue, conflictInfo, courseName }) {
     return (
         <NotifModal
             isOpen={isOpen}
@@ -10,7 +10,7 @@ export default function ConflictModal({ isOpen, onClose, onContinue, conflictInf
             image={WarningIcon}
             subtitle={
                 <>
-                    You already have an enrollment with the same schedule.
+                    You are already enrolled in <span className="font-bold">"{courseName}"</span> with the same schedule.<br></br>
                     {conflictInfo && (
                         <span className="font-semibold text-gray-900"> Are you sure you want to continue?</span>
                     )}

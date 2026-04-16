@@ -8,7 +8,6 @@ import SuccessModal from './SuccessModal.jsx';
 import { useModal } from '../../hooks/useModal.js';
 import ConflictModal from './ConflictModal.jsx';
 
-
 function WeeklyScheduleStep({ courseId, isOpen, onOpen, selectedId, onSelect }) {
     const [schedules, setSchedules] = useState([]);
 
@@ -183,6 +182,7 @@ export default function Enrollment({ courseId }) {
             if (!courseId) return;
             try {
                 const res = await api.get(`/courses/${courseId}`);
+                console.log(res)
                 setCourseBasePrice(Number(res.data.data.basePrice) || 0);
                 setCourseName(res.data.data.title)
             } catch (err) {
@@ -204,6 +204,7 @@ export default function Enrollment({ courseId }) {
             await api.post('/enrollments', {
                 courseId: Number(courseId),
                 courseScheduleId: selectedSession.courseScheduleId,
+                force: false
             });
             conflict.closeModal();
             success.openModal();
@@ -223,8 +224,9 @@ export default function Enrollment({ courseId }) {
             await api.post('/enrollments', {
                 courseId: Number(courseId),
                 courseScheduleId: selectedSession.courseScheduleId,
-                'force': true,
+                force: true,
             });
+            window.location.reload();
             conflict.closeModal();
         } catch (err) {
             console.error(err)
@@ -290,7 +292,7 @@ export default function Enrollment({ courseId }) {
             />
 
             <SuccessModal isOpen={success.isOpen} onClose={success.closeModal} courseName={courseName} />
-            <ConflictModal isOpen={conflict.isOpen} onClose={conflict.closeModal} onContinue={() => resubmitEnroll(true)} courseName={courseName} conflictInfo={conflictInfo} />
+            <ConflictModal isOpen={conflict.isOpen} onClose={conflict.closeModal} onContinue={() => resubmitEnroll(true)} courseName={courseName} conflictInfo={conflictInfo} coursename={courseName} />
         </div>
     );
 }
