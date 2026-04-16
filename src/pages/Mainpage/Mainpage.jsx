@@ -1,10 +1,11 @@
 import FeaturedCourses from "./featuredCourses";
 import CourseCarousel from "./courseCarousel";
 import InProgress from "./InProgress";
+import MockCard from "./MockCard";
 
 export default function Mainpage() {
     return (
-        <div className="px-50 py-15">
+        <div className="px-50 py-15 bg-[#f5f5f5] z-1">
             <div className="mb-15">
                 <CourseCarousel />
             </div>

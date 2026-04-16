@@ -1,4 +1,5 @@
 import useAuthStore from "../../store/useAuthStore";
+import CoursesInProgress from "./CoursesInProgress";
 import MockCard from "./MockCard";
 import SignInOverlay from "./SignInOverlay";
 
@@ -8,17 +9,17 @@ export default function InProgress() {
         <div>
             {isLoggedIn ?
                 <div>
-
+                    <CoursesInProgress />
                 </div> :
                 <div className="relative">
                     <div className="flex gap-3 blur-md">
-                        <MockCard />
                         <MockCard />
                         <MockCard />
                     </div>
                     <SignInOverlay />
                 </div>
             }
+            <MockCard />
         </div>
     )
 }

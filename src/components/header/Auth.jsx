@@ -41,7 +41,7 @@ export default function Auth() {
                 </div>
             </div>
             <ProfileModal isOpen={profile.isOpen} onClose={profile.closeModal} />
-            <SidebarModal isOpen={sidebar.isOpen} onClose={sidebar.closeModal} title={"Enrolled Courses"} />
+            <SidebarModal isOpen={sidebar.isOpen} onClose={sidebar.closeModal} />
         </div>
     );
 }

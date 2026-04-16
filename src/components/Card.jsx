@@ -1,4 +1,6 @@
-export default function Card({ Image, Lecturer, Title, Description, Price, Rating }) {
+import { Link } from "react-router-dom";
+
+export default function Card({ Image, Lecturer, Title, Description, Price, Rating, Id }) {
     return (
         <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 p-4">
             <div className="rounded-xl overflow-hidden mb-4">
@@ -34,9 +36,9 @@ export default function Card({ Image, Lecturer, Title, Description, Price, Ratin
                         ${Number(Price || 0).toFixed(0)}
                     </span>
                 </div>
-                <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors">
+                <Link to={`/course/${Id}`} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors">
                     Details
-                </button>
+                </Link>
             </div>
         </div>
     )

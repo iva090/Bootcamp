@@ -11,6 +11,7 @@ export const useGetFeaturedCourses = (onSuccess) => {
         try {
             const response = await api.get('/courses/featured');
             if (onSuccess) onSuccess(response.data);
+            console.log(response.data)
             return { success: true, data: response.data };
         } catch (err) {
             const apiError = err.response?.data?.message || "Something went wrong";
