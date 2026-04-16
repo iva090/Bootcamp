@@ -15,11 +15,11 @@ export default function InProgress() {
                     <div className="flex gap-3 blur-md">
                         <MockCard />
                         <MockCard />
+                        <MockCard />
                     </div>
                     <SignInOverlay />
                 </div>
             }
-            <MockCard />
         </div>
     )
 }

@@ -34,7 +34,7 @@ export default function CourseCarousel() {
             loop={false}
             autoplay
             interval={3000}
-            className="relative overflow-hidden rounded-3xl group z-200"
+            className="relative overflow-hidden rounded-3xl group z-50"
         >
             <Carousel.ItemGroup>
                 {slides.map((slide, i) => (
