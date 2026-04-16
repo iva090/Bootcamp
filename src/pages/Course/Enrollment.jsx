@@ -6,6 +6,7 @@ import SessionOption from './SessionOptions';
 import PriceSummary from './PriceSummary';
 import SuccessModal from './SuccessModal.jsx';
 import { useModal } from '../../hooks/useModal.js';
+import ConflictModal from './ConflictModal.jsx';
 
 
 function WeeklyScheduleStep({ courseId, isOpen, onOpen, selectedId, onSelect }) {
@@ -75,7 +76,6 @@ function TimeSlotStep({ courseId, weeklyId, isOpen, onOpen, selectedId, onSelect
                 const res = await api.get(`/courses/${courseId}/time-slots`, {
                     params: { weekly_schedule_id: weeklyId }
                 });
-                console.log(res.data)
                 setSlots(res.data.data || []);
             } catch (err) { console.error(err); }
             finally { setLoading(false); }
@@ -141,7 +141,6 @@ function SessionTypeStep({ courseId, weeklyId, timeSlotId, isOpen, onOpen, selec
                 const res = await api.get(`/courses/${courseId}/session-types`, {
                     params: { weekly_schedule_id: weeklyId, time_slot_id: timeSlotId }
                 });
-                console.log(res.data)
                 setTypes(res.data.data || []);
             } catch (err) { console.error(err); }
         };
@@ -174,6 +173,9 @@ export default function Enrollment({ courseId }) {
     const [selectedSession, setSelectedSession] = useState(null);
     const [courseBasePrice, setCourseBasePrice] = useState(0);
     const [courseName, setCourseName] = useState("");
+    const [courseSchedule, setCourseSchedule] = useState("")
+    const [conflictInfo, setConflictInfo] = useState(null);
+    const conflict = useModal();
     const success = useModal();
 
     useEffect(() => {
@@ -181,6 +183,7 @@ export default function Enrollment({ courseId }) {
             if (!courseId) return;
             try {
                 const res = await api.get(`/courses/${courseId}`);
+                console.log(res);
                 setCourseBasePrice(Number(res.data.data.basePrice) || 0);
                 setCourseName(res.data.data.title)
             } catch (err) {
@@ -196,18 +199,38 @@ export default function Enrollment({ courseId }) {
 
     const isProfileFilled = useAuthStore((state) => state.isProfileFilled);
 
-    const handleEnroll = async () => {
+    const handleEnroll = async (force = false) => {
         if (!selectedSession) return;
-
+        console.log(selectedSession)
         try {
             await api.post('/enrollments', {
                 courseId: Number(courseId),
-                courseScheduleId: selectedSession.courseScheduleId
+                courseScheduleId: selectedSession.courseScheduleId,
             });
+            conflict.closeModal();
             success.openModal();
-
         } catch (err) {
-            alert("Enrollment failed");
+            if (err.response?.status === 409) {
+                setConflictInfo(err.response.data.conflicts?.[0] ?? null);
+                conflict.openModal();
+            } else {
+                alert("Enrollment failed");
+            }
+        }
+    };
+
+    const resubmitEnroll = async (force = false) => {
+        if (!selectedSession) return;
+        console.log(selectedSession)
+        try {
+            await api.post('/enrollments', {
+                courseId: Number(courseId),
+                courseScheduleId: selectedSession.courseScheduleId,
+                'force': true,
+            });
+            conflict.closeModal();
+        } catch (err) {
+            console.error(err)
         }
     };
 
@@ -269,7 +292,8 @@ export default function Enrollment({ courseId }) {
                 onEnroll={handleEnroll}
             />
 
-            <SuccessModal isOpen={true} onClose={success.closeModal} courseName={courseName} />
+            <SuccessModal isOpen={success.isOpen} onClose={success.closeModal} courseName={courseName} />
+            <ConflictModal isOpen={conflict.isOpen} onClose={conflict.closeModal} onContinue={() => resubmitEnroll(true)} courseName={courseName} conflictInfo={conflictInfo} />
         </div>
     );
 }

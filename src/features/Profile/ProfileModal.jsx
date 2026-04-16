@@ -153,7 +153,7 @@ export default function ProfileModal({ isOpen, onClose }) {
                             label="Mobile Number"
                             className
                             name="mobileNumber"
-                            prefix="+995" // Added this
+                            prefix="+995"
                             value={formData.mobileNumber}
                             formData={formData}
                             setFormData={setFormData}

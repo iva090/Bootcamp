@@ -4,7 +4,6 @@ import SignInOverlay from "./SignInOverlay";
 
 export default function InProgress() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    console.log(isLoggedIn)
     return (
         <div>
             {isLoggedIn ?
