@@ -44,7 +44,6 @@ export default function CoursePage() {
         const fetchDetails = async () => {
             try {
                 const data = await getCourseDetails(id);
-                console.log(data)
                 setCourse(data);
             } catch (err) {
                 console.error(err)
@@ -54,8 +53,6 @@ export default function CoursePage() {
         }
         fetchDetails();
     }, [id]);
-
-
 
     if (loading) return <div className="p-20 text-center text-gray-500">Loading Course...</div>;
     if (!course) return <div className="p-20 text-center">Course not found.</div>;
@@ -134,9 +131,10 @@ export default function CoursePage() {
                                 type: course.enrollment.schedule.sessionType.name,
                                 location: course.enrollment.schedule.location
                             }}
-                            isCompeleted={course.enrollment.completedAt}
+                            isCompleted={!!course.enrollment.completedAt}
                             progress={course.enrollment.progress}
-                            courseId={course.id}
+                            courseId={course.enrollment.id}
+                            courseTitle={course.title}
                         />
                     ) : (
                         <Enrollment courseId={id} basePrice={Math.floor(course.basePrice)} />
