@@ -183,7 +183,6 @@ export default function Enrollment({ courseId }) {
             if (!courseId) return;
             try {
                 const res = await api.get(`/courses/${courseId}`);
-                console.log(res);
                 setCourseBasePrice(Number(res.data.data.basePrice) || 0);
                 setCourseName(res.data.data.title)
             } catch (err) {
@@ -201,7 +200,6 @@ export default function Enrollment({ courseId }) {
 
     const handleEnroll = async (force = false) => {
         if (!selectedSession) return;
-        console.log(selectedSession)
         try {
             await api.post('/enrollments', {
                 courseId: Number(courseId),
@@ -221,7 +219,6 @@ export default function Enrollment({ courseId }) {
 
     const resubmitEnroll = async (force = false) => {
         if (!selectedSession) return;
-        console.log(selectedSession)
         try {
             await api.post('/enrollments', {
                 courseId: Number(courseId),

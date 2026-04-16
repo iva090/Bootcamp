@@ -4,6 +4,7 @@ import { getCourseDetails } from "./getCourseDetails";
 import PathBar from "../../components/pathbar";
 import Enrollment from "./Enrollment";
 import Authorization from "./Authorization";
+import EnrolledCard from "./EnrolledCard";
 
 const IconMap = {
     development: (
@@ -43,6 +44,7 @@ export default function CoursePage() {
         const fetchDetails = async () => {
             try {
                 const data = await getCourseDetails(id);
+                console.log(data)
                 setCourse(data);
             } catch (err) {
                 console.error(err)
@@ -125,15 +127,15 @@ export default function CoursePage() {
 
                 <div className="flex flex-col gap-6">
                     {isEnrolled ? (
-                        <div className="bg-green-50 border border-green-200 rounded-3xl p-6 shadow-sm">
-                            <h3 className="text-green-800 font-bold text-lg mb-2">You are enrolled!</h3>
-                            <p className="text-green-700 text-sm mb-4">
-                                You are already a student of this course. Check your dashboard for materials.
-                            </p>
-                            <button className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-colors">
-                                Go to My Courses
-                            </button>
-                        </div>
+                        <EnrolledCard
+                            schedule={{
+                                days: course.enrollment.schedule.weeklySchedule.label,
+                                time: course.enrollment.schedule.timeSlot.label,
+                                type: course.enrollment.schedule.sessionType.name,
+                                location: course.enrollment.schedule.location
+                            }}
+                            progress={course.enrollment.progress}
+                        />
                     ) : (
                         <Enrollment courseId={id} basePrice={Math.floor(course.basePrice)} />
                     )}
