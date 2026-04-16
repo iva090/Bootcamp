@@ -118,8 +118,16 @@ const FinalStep = ({ onSubmit, formData, setFormData, isLoading, apiError }) => 
         }
     };
 
+    const generalErrorMessage = typeof apiError === 'string' ? apiError : apiError?.message;
+
     return (
         <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-5 animate-fadeIn">
+            {generalErrorMessage && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium animate-shake">
+                    {generalErrorMessage}
+                </div>
+            )}
+
             <InputBox
                 label="Username"
                 type="text"

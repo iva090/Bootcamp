@@ -34,7 +34,7 @@ export default function Auth() {
                     />
                 </div>
 
-                <span className={`absolute bottom-0 right-0 w-3 h-3 bg-${isProfileFilled ? `green` : `yellow`}-500 rounded-full border-2 border-white shadow-sm`} />
+                <span className={`absolute bottom-0 z-20 right-0 w-3 h-3 ${isProfileFilled ? `bg-green-500` : `bg-yellow-500`} rounded-full border-2 border-white shadow-sm`} />
 
                 <div className="absolute top-12 right-0 hidden group-hover:block bg-gray-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
                     {user?.username}
