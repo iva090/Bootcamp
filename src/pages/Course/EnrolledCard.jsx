@@ -9,7 +9,6 @@ export default function EnrolledCard({ schedule, progress, isCompleted, courseId
     const success = useModal();
     const { id } = useParams();
 
-    console.log(isCompleted)
     const completeCourse = async (force = false) => {
         try {
             await api.patch(`/enrollments/${courseId}/complete`, {});

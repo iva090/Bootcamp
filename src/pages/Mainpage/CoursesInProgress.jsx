@@ -10,7 +10,6 @@ export default function CoursesInProgress() {
             try {
                 const response = await api.get('/courses/in-progress');
                 setCourses(response.data.data || []);
-                console.log("Fetched enrollments:", response.data.data);
             } catch (err) {
                 console.error("Failed to fetch courses:", err);
             }

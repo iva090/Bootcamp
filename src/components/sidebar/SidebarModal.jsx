@@ -18,7 +18,6 @@ export default function SidebarModal({ isOpen, onClose }) {
         }
         if (isOpen) fetchEnrollments();
     }, [isOpen])
-    console.log(enrollments)
 
     return (
         <>
