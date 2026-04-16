@@ -9,7 +9,7 @@ export default function FilterButton({
         <button
             onClick={onClick}
             className={`
-        group flex items-center gap-2 px-4 py-2 border border-${active ? '1' : 'none'} rounded-xl shadow-sm 
+        group flex items-center gap-2 px-4 py-2 border ${active ? 'border-1' : 'border-none'} rounded-xl shadow-sm 
         font-medium transition-all duration-200 text-sm
         ${active
                     ? 'bg-[#f1f0ff] text-[#5d51e8] border-[#5d51e8]/50 shadow-md'
